@@ -6,6 +6,8 @@ from extensions import db, migrate, jwt
 from config import Config
 from routes_usuario import bp_usuario
 from routes_vision import bp_vision
+from routes_manual import bp_manual
+from routes_history import bp_history
 
 load_dotenv()
 
@@ -36,6 +38,8 @@ def create_app():
 
     app.register_blueprint(bp_usuario)
     app.register_blueprint(bp_vision)
+    app.register_blueprint(bp_manual)
+    app.register_blueprint(bp_history)
 
     @app.get("/storage/<path:filename>")
     def storage(filename):

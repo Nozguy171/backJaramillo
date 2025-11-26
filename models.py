@@ -175,3 +175,28 @@ class VideoSegmentationResult(db.Model):
         viewonly=True,
         back_populates="last_result",
     )
+
+class EtiquetaManualAsset(db.Model):
+    __tablename__ = "manual_assets"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(
+        db.Integer, 
+        db.ForeignKey("usuario.id", ondelete="CASCADE"), 
+        nullable=False
+    )
+    filename = db.Column(db.String(255), nullable=False)
+    width = db.Column(db.Integer)
+    height = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class EtiquetaManualResult(db.Model):
+    __tablename__ = "manual_results"
+    id = db.Column(db.Integer, primary_key=True)
+    asset_id = db.Column(
+        db.Integer, 
+        db.ForeignKey("manual_assets.id", ondelete="CASCADE"), 
+        nullable=False
+    )
+    annotations = db.Column(db.JSON, nullable=False)  # polígonos / cajas / puntos
+    overlay_filename = db.Column(db.String(255)) 
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

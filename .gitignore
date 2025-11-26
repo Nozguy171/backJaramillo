@@ -20,7 +20,6 @@ dist/
 *.err
 logs/
 *.pid
-models/
 *.pt
 *.pth
 *.onnx
@@ -47,9 +46,6 @@ temp/
 pgdata/
 .tmp/
 *.sock
-Dockerfile
-docker-compose.yml
-docker-compose.override.yml
 .dockerignore
 .env
 .env.*
@@ -66,5 +62,3 @@ desktop.ini
 *.old
 *.orig
 *.rej
-migrations/
-!migrations/.gitkeep
