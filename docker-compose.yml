@@ -8,6 +8,7 @@ services:
       POSTGRES_DB: appdb
     ports:
       - "5623:5432"   # PUERTO NUEVO MUY RARO
+      - "5623:5432"   # PUERTO NUEVO MUY RARO
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -18,6 +19,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@localhost.com
       PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
+      - "5150:5000"   # PUERTO NUEVO
       - "5150:5000"   # PUERTO NUEVO
     depends_on:
       - db
@@ -33,6 +35,7 @@ services:
       SEG_MODEL_PATH: /models/seg.pt
       POSE_MODEL_PATH: /models/pose.pt
       OBB_MODEL_PATH:  /models/obb.pt
+      PUBLIC_BACKEND_URL: "http://157.230.134.235:5051"
       STORAGE_DIR: /app/storage
       PORT: "5000"
     volumes:
