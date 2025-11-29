@@ -3,11 +3,11 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: appsecret
+      POSTGRES_DB: appdb
     ports:
-      - "5623:5432"
+      - "5623:5432"   # PUERTO NUEVO MUY RARO
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -15,10 +15,10 @@ services:
     image: dpage/pgadmin4:8
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: admin@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
-      - "5150:5000"
+      - "5150:5000"   # PUERTO NUEVO
     depends_on:
       - db
 
@@ -26,18 +26,19 @@ services:
     build: .
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      SECRET_KEY: ${SECRET_KEY}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      FLASK_ENV: ${FLASK_ENV}
-      SEG_MODEL_PATH: ${SEG_MODEL_PATH}
-      POSE_MODEL_PATH: ${POSE_MODEL_PATH}
-      OBB_MODEL_PATH: ${OBB_MODEL_PATH}
-      STORAGE_DIR: ${STORAGE_DIR}
-      PORT: ${PORT}
+      DATABASE_URL: postgresql+psycopg2://appuser:appsecret@db:5432/appdb
+      SECRET_KEY: "pOZ2h3y7oOa9Wm5yC1sQqz6GJ0N4Nw2k1mUe0l8mA9fC2bJ7sF"
+      JWT_SECRET_KEY: "j8F0G4d2V6q1Y3p9Q7r5L1u3M8k2S6w0X4a9T2v7B1n5H3c0L2"
+      FLASK_ENV: production
+      SEG_MODEL_PATH: /models/seg.pt
+      POSE_MODEL_PATH: /models/pose.pt
+      OBB_MODEL_PATH:  /models/obb.pt
+      PUBLIC_BACKEND_URL: "http://157.230.134.235:5051"
+      STORAGE_DIR: /app/storage
+      PORT: "5000"
     volumes:
-      - ./models:/models:ro
-      - storage:/app/storage
+      - ./models:/models:ro      
+      - storage:/app/storage      
     ports:
       - "5051:5000"
     depends_on:
@@ -45,4 +46,4 @@ services:
 
 volumes:
   pgdata:
-  storage:
+  storage:       
