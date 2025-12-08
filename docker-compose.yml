@@ -35,7 +35,7 @@ services:
       SEG_MODEL_PATH: /models/seg.pt
       POSE_MODEL_PATH: /models/pose.pt
       OBB_MODEL_PATH:  /models/obb.pt
-      PUBLIC_BACKEND_URL: "http://localhost:5051"
+      PUBLIC_BACKEND_URL: "http://157.230.134.235:5051"
       STORAGE_DIR: /app/storage
       PORT: "5000"
     volumes:

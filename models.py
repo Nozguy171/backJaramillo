@@ -179,11 +179,20 @@ class VideoSegmentationResult(db.Model):
 class EtiquetaManualAsset(db.Model):
     __tablename__ = "manual_assets"
     id = db.Column(db.Integer, primary_key=True)
+
     user_id = db.Column(
         db.Integer, 
         db.ForeignKey("usuario.id", ondelete="CASCADE"), 
         nullable=False
     )
+
+    project_id = db.Column(
+        db.Integer,
+        db.ForeignKey("projects.id", ondelete="CASCADE"),
+        nullable=True,  # puede ser null al inicio
+        index=True
+    )
+
     filename = db.Column(db.String(255), nullable=False)
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
@@ -200,3 +209,42 @@ class EtiquetaManualResult(db.Model):
     annotations = db.Column(db.JSON, nullable=False)  # polígonos / cajas / puntos
     overlay_filename = db.Column(db.String(255)) 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Project(db.Model):
+    __tablename__ = "projects"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("usuario.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True
+    )
+    name = db.Column(db.String(255), nullable=False)
+    slug = db.Column(db.String(255), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # para listar imágenes por proyecto
+    assets = db.relationship(
+        "EtiquetaManualAsset",
+        backref="project",
+        cascade="all, delete-orphan"
+    )
+
+class ProjectClass(db.Model):
+    __tablename__ = "project_classes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(
+        db.Integer,
+        db.ForeignKey("projects.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True
+    )
+    name = db.Column(db.String(255), nullable=False)
+    class_id = db.Column(db.Integer, nullable=False)  # ID numérico de YOLO
+
+    __table_args__ = (
+        db.UniqueConstraint("project_id", "name", name="uq_project_class_name"),
+        db.UniqueConstraint("project_id", "class_id", name="uq_project_class_id"),
+    )

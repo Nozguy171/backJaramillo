@@ -6,6 +6,7 @@ Flask-JWT-Extended
 psycopg2-binary
 SQLAlchemy
 flask_sqlalchemy
+python-slugify
 
 ultralytics==8.*
 opencv-python
